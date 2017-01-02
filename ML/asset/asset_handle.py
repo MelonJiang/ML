@@ -195,7 +195,7 @@ class LogicalProcess(object):
             3 : ['删除'],
         }
         if not user.id:
-            user = models.MyUser.objects.filter(is_admin=True).last()
+            user = models.User.objects.filter(is_admin=True).last()
 
         event_type= None
         for k,v in log_event.items():
