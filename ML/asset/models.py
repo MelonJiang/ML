@@ -300,11 +300,11 @@ class EventLog(models.Model):
         (7,u'IDC信息'),
     )
     event_type = models.SmallIntegerField(u'事件类型', choices= event_type_choices)
-    asset = models.ForeignKey('Asset')
+    # asset = models.ForeignKey('Asset')
     component = models.CharField('事件子项',max_length=255, blank=True,null=True)
     detail = models.TextField(u'事件详情')
     date = models.DateTimeField(u'事件时间',auto_now_add=True)
-    user = models.ForeignKey('UserProfile',verbose_name=u'事件源')
+    user = models.ForeignKey(User,verbose_name=u'事件源')
     memo = models.TextField(u'备注', blank=True,null=True)
 
     def __unicode__(self):
@@ -313,16 +313,6 @@ class EventLog(models.Model):
         verbose_name = '事件纪录'
         verbose_name_plural = "事件纪录"
 
-    def colored_event_type(self):
-        if self.event_type == 1:
-            cell_html = '<span style="background: orange;">%s</span>'
-        elif self.event_type == 2 :
-            cell_html = '<span style="background: yellowgreen;">%s</span>'
-        else:
-            cell_html = '<span >%s</span>'
-        return cell_html % self.get_event_type_display()
-    colored_event_type.allow_tags = True
-    colored_event_type.short_description = u'事件类型'
 
 class NewAssetApprovalZone(models.Model):
     sn = models.CharField(u'资产SN号',max_length=128, unique=True)

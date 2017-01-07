@@ -3,9 +3,6 @@ from django import forms
 from asset import models
 
 class AssetForm(forms.Form):
-    # sn = forms.CharField(error_messages={"required": "sn不能为空"},  # 设置显示的错误信息
-    #                      widget=forms.TextInput(attrs={"class": "form-control",'id':'sn','readonly':'true',
-    #                                                }))
     serial_name = forms.CharField(error_messages={"required": "序列号不能为空"},  # 设置显示的错误信息
                          widget=forms.TextInput(attrs={"class": "form-control",'id':'serial_name','readonly':'true',
                                                   }))
@@ -46,7 +43,6 @@ class AssetForm(forms.Form):
     module = forms.CharField(error_messages={"required": "模块"},  # 设置显示的错误信息
                                   widget=forms.TextInput(attrs={"class": "form-control", 'id': 'module',
                                                                 "placeholder": "模块"}))
-
     status_type=(
          (1, '在用'),
          (2, '停用')
@@ -60,7 +56,6 @@ class AssetForm(forms.Form):
                            widget=forms.Textarea(attrs={"class": "form-control",'id':'memo',
                                                         "placeholder": "备注"})  # 添加属性和样式
                            )
-
 
     def __init__(self, *args, **kwargs):
         super(AssetForm, self).__init__(*args, **kwargs)
@@ -77,11 +72,7 @@ class AssetForm(forms.Form):
         self.fields['application'].widget.choices = data_tuple1
 
 
-
 class AssetForm_create(forms.Form):
-    # sn = forms.CharField(error_messages={"required": "sn不能为空"},  # 设置显示的错误信息
-    #                      widget=forms.TextInput(attrs={"class": "form-control",'id':'sn_create',
-    #                                                    "placeholder": "SN号"}))
 
     serial_name = forms.CharField(error_messages={"required": "序列号不能为空"},  # 设置显示的错误信息
                            widget=forms.TextInput(attrs={"class": "form-control", 'id': 'serial_name_create',
@@ -99,13 +90,10 @@ class AssetForm_create(forms.Form):
         )
     asset_type = forms.CharField(widget=forms.widgets.Select(choices=asset_type_choice,
                                                                       attrs={'class': "form-control selectpicker",'id':'asset_type_create'}))
-
     ip = forms.GenericIPAddressField(error_messages={"required": "ip不能为空"},
                          widget=forms.TextInput(attrs={"class": "form-control",'id':'ip_create',
                                                        "placeholder": "管理IP"}))  # 添加属性和样式
-
     idc_type = forms.IntegerField(widget=forms.widgets.Select(attrs={'class': "form-control selectpicker",'id':'idc_type_create'}))
-
 
     idc_jg = forms.CharField(error_messages={"required": "机柜编号不能为空"},
                              widget=forms.TextInput(attrs={"class": "form-control",'id':'idc_jg_create',
@@ -114,7 +102,6 @@ class AssetForm_create(forms.Form):
                 attrs={'class': "form-control selectpicker show-tick", 'title': 'Nothing selected', 'data-live-search': "true",
                'id': 'projectname_create'}))
 
-
     application = forms.IntegerField(widget=forms.widgets.Select(
         attrs={'class': "form-control selectpicker show-tick", 'title': 'Nothing selected', 'data-live-search': "true",
                'id': 'application_create'}))
@@ -122,7 +109,6 @@ class AssetForm_create(forms.Form):
     module = forms.CharField(error_messages={"required": "模块"},  # 设置显示的错误信息
                                   widget=forms.TextInput(attrs={"class": "form-control", 'id': 'module_create',
                                                                 "placeholder": "模块"}))
-
     status_type=(
          (1, '在用'),
          (2, '停用'),

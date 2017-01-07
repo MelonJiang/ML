@@ -74,6 +74,7 @@ class Asset(object):
             print("没有资产数据")
 
     def mandatory_check(self,data,check_id=False):
+        '''根据条件取出 asset_obj 对象'''
         for field in self.mandatory_fields:
             if field not in data:
                 self.response_msg('error','MandatoryCheckFailed', "缺少必须的字段%s"%field)
@@ -156,7 +157,7 @@ class Asset(object):
                 obj.save()
                 return obj
         except Exception as e:
-            self.response_msg('error','ObjectCreationException','Object [server] %s' % str(e) )
+            self.response_msg('error','CreationException','Object [server] %s' % str(e) )
     def __create_manufactory(self):
         self._type_validation(self.clean_data,'manufactory',str)
         manufactory = self.clean_data.get('manufactory')
@@ -172,7 +173,7 @@ class Asset(object):
                 self.asset_obj.save()
         except Exception as e:
             print(e)
-            self.response_msg('error','ObjectCreationException','Object [manufactory] %s' % str(e) )
+            self.response_msg('error','CreationException','Object [manufactory] %s' % str(e) )
     def __create_cpu(self):
         try:
             self._type_validation(self.clean_data,'model',str)
@@ -190,7 +191,7 @@ class Asset(object):
                 obj.save()
         except Exception as e:
             print(e)
-            self.response_msg('error','ObjectCreationException','Object [cpu] %s' % str(e) )
+            self.response_msg('error','CreationException','Object [cpu] %s' % str(e) )
     def __create_disk(self):
         disk_info = self.clean_data.get('physical_disk_driver')
         if disk_info:
@@ -215,7 +216,7 @@ class Asset(object):
                         obj.save()
                 except Exception as e:
                     print(e)
-                    self.response_msg('error','ObjectCreationException','Object [disk] %s' % str(e) )
+                    self.response_msg('error','CreationException','Object [disk] %s' % str(e) )
         else:
             self.response_msg('error','LackData','提交的内容没有 DISK 信息' )
     def __create_nic(self):
@@ -240,7 +241,7 @@ class Asset(object):
                         obj.save()
                 except Exception as e:
                     print(e)
-                    self.response_msg('error','ObjectCreationException','Object [nic] %s' % str(e) )
+                    self.response_msg('error','CreationException','Object [nic] %s' % str(e) )
         else:
             self.response_msg('error','LackOfData','提交的内容没有 NIC 信息')
     def __create_ram(self):
@@ -263,7 +264,7 @@ class Asset(object):
                         obj.save()
                 except Exception as e:
                     print(e)
-                    self.response_msg('error','ObjectCreationException','Object [ram] %s' % str(e) )
+                    self.response_msg('error','CreationException','Object [ram] %s' % str(e) )
         else:
             self.response_msg('error','LackOfData','提交的内容没有 RAM 信息' )
 
@@ -430,7 +431,7 @@ class Asset(object):
             2 : ['NewComponentAdded'],
         }
         if not user.id:
-            user = models.MyUser.objects.filter(is_admin=True).last()
+            user = models.User.objects.filter(is_admin=True).last()
 
         event_type= None
         for k,v in log_event.items():

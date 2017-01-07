@@ -50,104 +50,105 @@ def nicinfo():
 
     raw_data= raw_data.split("\n")
 
-    #nic_dic = {}
-    #next_ip_line = False
-    #last_mac_addr = None
-    # for line in raw_data:
-    #     if next_ip_line:
-    #         #print last_mac_addr
-    #         #print line #, last_mac_addr.strip()
-    #         next_ip_line = False
-    #         nic_name = last_mac_addr.split()[0]
-    #         mac_addr = last_mac_addr.split("HWaddr")[1].strip()
-    #         raw_ip_addr = line.split("inet addr:")
-    #         raw_bcast = line.split("Bcast:")
-    #         raw_netmask = line.split("Mask:")
-    #         if len(raw_ip_addr) > 1: #has addr
-    #             ip_addr = raw_ip_addr[1].split()[0]
-    #             network = raw_bcast[1].split()[0]
-    #             netmask =raw_netmask[1].split()[0]
-    #             #print(ip_addr,network,netmask)
-    #         else:
-    #             ip_addr = None
-    #             network = None
-    #             netmask = None
-    #         if mac_addr not in nic_dic:
-    #             nic_dic[mac_addr] = {'name': nic_name,
-    #                                  'macaddress': mac_addr,
-    #                                  'netmask': netmask,
-    #                                  'network': network,
-    #                                  'bonding': 0,
-    #                                  'model': 'unknown',
-    #                                  'ipaddress': ip_addr,
-    #                                  }
-    #         else: #mac already exist , must be boding address
-    #             if '%s_bonding_addr' %(mac_addr) not in nic_dic:
-    #                 random_mac_addr = '%s_bonding_addr' %(mac_addr)
-    #             else:
-    #                 random_mac_addr = '%s_bonding_addr2' %(mac_addr)
-    #
-    #             nic_dic[random_mac_addr] = {'name': nic_name,
-    #                                  'macaddress':random_mac_addr,
-    #                                  'netmask': netmask,
-    #                                  'network': network,
-    #                                  'bonding': 1,
-    #                                  'model': 'unknown',
-    #                                  'ipaddress': ip_addr,
-    #                                  }
-    #
-    #     if "HWaddr" in line:
-    #         #print line
-    #         next_ip_line = True
-    #         last_mac_addr = line
-
     nic_dic = {}
-    dic ={}
+    next_ip_line = False
+    last_mac_addr = None
     for line in raw_data:
-        if line != "":
-            if "eno" in line.split()[0]:
-                #print "line:",line
-                for last_mac_addr in raw_data:
-                    #print (last_mac_addr)
-                    if last_mac_addr != "":
-                        if "eno" in last_mac_addr.split()[0]:
-                            nic_name = last_mac_addr.split()[0]
-                            dic['name'] = nic_name
-                        else:
-                            nic_name=None
+        if next_ip_line:
+            #print last_mac_addr
+            #print line #, last_mac_addr.strip()
+            next_ip_line = False
+            nic_name = last_mac_addr.split()[0]
+            mac_addr = last_mac_addr.split("HWaddr")[1].strip()
+            raw_ip_addr = line.split("inet addr:")
+            raw_bcast = line.split("Bcast:")
+            raw_netmask = line.split("Mask:")
+            if len(raw_ip_addr) > 1: #has addr
+                ip_addr = raw_ip_addr[1].split()[0]
+                network = raw_bcast[1].split()[0]
+                netmask =raw_netmask[1].split()[0]
+                #print(ip_addr,network,netmask)
+            else:
+                ip_addr = None
+                network = None
+                netmask = None
+            if mac_addr not in nic_dic:
+                nic_dic[mac_addr] = {'name': nic_name,
+                                     'macaddress': mac_addr,
+                                     'netmask': netmask,
+                                     'network': network,
+                                     'bonding': 0,
+                                     'model': 'unknown',
+                                     'ipaddress': ip_addr,
+                                     }
+            else: #mac already exist , must be boding address
+                if '%s_bonding_addr' %(mac_addr) not in nic_dic:
+                    random_mac_addr = '%s_bonding_addr' %(mac_addr)
+                else:
+                    random_mac_addr = '%s_bonding_addr2' %(mac_addr)
 
-                        mac_addr1 = last_mac_addr.split("ether")
-                        #print ('mac_addr1:',mac_addr1)
-                        if len(mac_addr1)>1:
-                            mac_addr = mac_addr1[1].split()[0]
-                            #print (mac_addr)
-                            dic['macaddress']=mac_addr
-                        else:
-                            mac_addr = None
+                nic_dic[random_mac_addr] = {'name': nic_name,
+                                     'macaddress':random_mac_addr,
+                                     'netmask': netmask,
+                                     'network': network,
+                                     'bonding': 1,
+                                     'model': 'unknown',
+                                     'ipaddress': ip_addr,
+                                     }
 
-                        raw_ip_addr = last_mac_addr.split("inet")
-                        raw_bcast = last_mac_addr.split("broadcast")
-                        #print (raw_bcast)
-                        raw_netmask = last_mac_addr.split("netmask")
-                        if len(raw_bcast) > 1:  # has addr
-                            ip_addr = raw_ip_addr[1].split()[0]
-                            network = raw_bcast[1].split()[0]
-                            netmask = raw_netmask[1].split()[0]
-                            dic['ipaddress'] = ip_addr
-                            dic['network'] = network
-                            dic['netmask'] = netmask
-                            dic['bonding'] = 1
-                            dic['model'] = 'unknown'
-                        else:
-                            ip_addr = None
-                            network = None
-                            netmask = None
+        if "HWaddr" in line:
+            #print line
+            next_ip_line = True
+            last_mac_addr = line
 
-                        if 'macaddress' in dic:
-                            nic_dic[mac_addr] = dic
-                            #print (nic_dic)
-                            dic={}
-                            break
+    # nic_dic = {}
+    # dic ={}
+    # for line in raw_data:
+    #     if line != "":
+    #         if "eno" in line.split()[0]:
+    #             #print "line:",line
+    #             for last_mac_addr in raw_data:
+    #                 #print (last_mac_addr)
+    #                 if last_mac_addr != "":
+    #                     if "eno" in last_mac_addr.split()[0]:
+    #                         nic_name = last_mac_addr.split()[0]
+    #                         dic['name'] = nic_name
+    #                     else:
+    #                         nic_name=None
+    #
+    #                     mac_addr1 = last_mac_addr.split("ether")
+    #                     #print ('mac_addr1:',mac_addr1)
+    #                     if len(mac_addr1)>1:
+    #                         mac_addr = mac_addr1[1].split()[0]
+    #                         #print (mac_addr)
+    #                         dic['macaddress']=mac_addr
+    #                     else:
+    #                         mac_addr = None
+    #
+    #                     raw_ip_addr = last_mac_addr.split("inet")
+    #                     raw_bcast = last_mac_addr.split("broadcast")
+    #                     #print (raw_bcast)
+    #                     raw_netmask = last_mac_addr.split("netmask")
+    #                     if len(raw_bcast) > 1:  # has addr
+    #                         ip_addr = raw_ip_addr[1].split()[0]
+    #                         network = raw_bcast[1].split()[0]
+    #                         netmask = raw_netmask[1].split()[0]
+    #                         dic['ipaddress'] = ip_addr
+    #                         dic['network'] = network
+    #                         dic['netmask'] = netmask
+    #                         dic['bonding'] = 1
+    #                         dic['model'] = 'unknown'
+    #                     else:
+    #                         ip_addr = None
+    #                         network = None
+    #                         netmask = None
+    #
+    #                     if 'macaddress' in dic:
+    #                         nic_dic[mac_addr] = dic
+    #                         #print (nic_dic)
+    #                         dic={}
+    #                         break
+    #
     nic_list = []
     for k, v in nic_dic.items():
         nic_list.append(v)

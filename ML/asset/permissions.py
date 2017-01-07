@@ -34,20 +34,16 @@ def perm_check(request, *args, **kwargs):
         print "get_perm", get_perm
         if get_perm:
             for i in get_perm:
-                print "i---",i
                 perm_name = i.name
                 perm_str = 'asset.%s' % perm_name
-                print perm_str
-                print request.user.get_all_permissions()
-                print request.user.has_perm(perm_str)
                 if request.user.has_perm(perm_str):
-                    print('====》权限已匹配')
+                    print('》》》》权限成功匹配')
                     return True
                 else:
-                    print('---->权限没有匹配')
+                    print('权限匹配失败')
                     return False
             else:
-                print('---->权限没有匹配')
+                print('权限匹配失败')
                 return False
         else:
             return False

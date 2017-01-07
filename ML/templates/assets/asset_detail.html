@@ -43,12 +43,12 @@
     <div class="tab-content">
         <div id="tab-asset-info" class="tab-pane fade active in">
 
-           <table class=" asset-info-table">
+           <table class="asset-info-table table">
                <tr>
                    <td class="col-md-2 bold">资产类型</td>
                    <td class="col-md-4">: {{ asset_obj.get_asset_type_display }}</td>
-                   <td class="col-md-2 bold">所属业务线</td>
-                   <td class="col-md-4">: {{ asset_obj.business_unit }}</td>
+                   <td class="col-md-2 bold">业务</td>
+                   <td class="col-md-4">: {{ asset_obj.application }}</td>
                </tr>
                <tr>
                    <td class="col-md-2 bold">IDC</td>
@@ -107,19 +107,23 @@
                <tr>
                    <td class="col-md-2 bold">总硬盘大小(GB)</td>
                    <td class="col-md-4">: {{ asset_obj.disk_set.select_related | sum_size }}</td>
-                   <td class="col-md-2 bold">状态</td>
-                   <td class="col-md-4">: <span class="badge badge-success">在用</span></td>
+                   <td class="col-md-2 bold">使用状态</td>
+
+                    {% if asset_obj.status == 1 %}
+                        <td class="col-md-4">: <span class="badge badge-use">{{ asset_obj.get_status_display }}</span></td>
+                    {% else %}
+                        <td class="col-md-4">: <span class="badge badge-stop">{{ asset_obj.get_status_display }}</span></td>
+                    {% endif %}
+
+
                </tr>
                <tr>
-                   <td class="col-md-2 bold">资产Tags</td>
-                   <td class="col-md-4">:
-                       {% for tag in asset_obj.tags.select_related %}
-
-                        <span class="badge badge-purple">{{ tag.name}}</span>
-                       {% endfor %}
-                   </td>
-                   <td class="col-md-2 bold">购买日期</td>
+                    <td class="col-md-2 bold">购买日期</td>
                    <td class="col-md-4">: {{ asset_obj.trade_date }}</td>
+
+                   <td class="col-md-2 bold">联系人</td>
+                   <td class="col-md-4">{{ asset_obj.linkman }}</td>
+
                </tr>
                <tr>
                    <td class="col-md-2 bold">过保日期</td>
@@ -139,8 +143,8 @@
         </div>
         <div id="tab-hardware-info" class="tab-pane fade">
 
-           <table class=" asset-info-table">
-               <h3 class="tab_h3">服务器</h3>
+           <table class="">
+               <h4 class="tab_h3">服务器</h4>
                <tr>
                    <td class="col-md-2 bold">Name</td>
                    <td class="col-md-4">: {{ asset_obj.name }}</td>
@@ -161,8 +165,8 @@
                </tr>
            </table>
            <hr/>
-           <table class=" asset-info-table">
-               <h3 class="tab_h3">CPU 信息</h3>
+           <table class="">
+               <h4 class="tab_h3">CPU 信息</h4>
                <tr>
                    <td class="col-md-2 bold">CPU型号</td>
                    <td class="col-md-4">: {{ asset_obj.cpu.cpu_model }}</td>
@@ -177,8 +181,8 @@
                </tr>
            </table>
            <hr/>
-           <table class=" asset-info-table">
-               <h3 class="tab_h3">RAM 信息</h3>
+           <table class="">
+               <h4 class="tab_h3">RAM 信息</h4>
                <tr>
                    <td class="col-md-2 bold">总内存大小(MB)</td>
                    <td class="col-md-4">: {{ asset_obj.ram_set.select_related | sum_size }}</td>
@@ -186,7 +190,7 @@
                    <td class="col-md-4">:  {{ asset_obj.ram_set.select_related | list_count }}</td>
                </tr>
            </table>
-           <table class="table asset-info-table">
+           <table class="table">
                <thead>
                    <tr>
                        <th>插槽</th>
@@ -211,8 +215,8 @@
            </table>
            <hr/>
 
-           <table class=" asset-info-table">
-               <h3 class="tab_h3">Disk 信息</h3>
+           <table class="">
+               <h4 class="tab_h3">Disk 信息</h4>
                <tr>
                    <td class="col-md-2 bold">总硬盘大小(GB)</td>
                    <td class="col-md-4">: {{ asset_obj.disk_set.select_related | sum_size }}</td>
@@ -220,7 +224,7 @@
                    <td class="col-md-4">:  {{ asset_obj.disk_set.select_related | list_count }}</td>
                </tr>
            </table>
-           <table class="table asset-info-table">
+           <table class="table">
                <thead>
                    <tr>
                        <th>插槽</th>
@@ -246,9 +250,8 @@
                {% endfor %}
            </table>
            <hr/>
-
-               <h3 class="tab_h3">NIC 信息</h3>
-           <table class="table asset-info-table">
+               <h4 class="tab_h3">NIC 信息</h4>
+           <table class="table">
                <thead>
                    <tr>
                        <th>网卡名</th>

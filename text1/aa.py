@@ -36,8 +36,6 @@ raw_data=['eno16777736: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500',
           '        TX packets 0  bytes 0 (0.0 B)',
           '        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0',
           '']
-
-
 def nicinfo():
     #tmp_f = file('/tmp/bonding_nic').read()
     #raw_data= subprocess.check_output("ifconfig -a",shell=True)
@@ -98,8 +96,59 @@ def nicinfo():
         nic_list.append(v)
         print (nic_list)
         return {'nic': nic_list}
+# nicinfo()
 
-nicinfo()
+import os, re
+from datetime import datetime
+
+# 导入Fabric API:
+#!/usr/bin/env python
+# encoding: utf-8
+
+
+from fabric.api import *
+# 服务器登录用户名:
+env.user = 'melon'
+# sudo用户为root:
+env.sudo_user = 'root'
+# 服务器地址，可以有多个，依次部署:
+env.hosts = ['192.168.0.104']
+env.password = '123456'
+def hello():
+    local('echo "本地用local"')
+
+def cmdcmd():
+    print "remote update"
+    put('aaa.py','/home/melon/bbb.py')
+    with cd('/home/melon'):   #cd用于进入某个目录
+        run('ls')  #远程操作用run
+
+def update():
+    hello()
+    cmdcmd()
+
+
+
+AR_FILE = 'AssetClient.tar.gz'
+def build():
+    local('tar -czvf %s /home/melon/ML/AssetClient'%AR_FILE)
+    print "压缩成功"
+
+
+def deploy():
+    put('%s'%AR_FILE, '/home/melon/%s'%AR_FILE)
+    print ("发送成功")
+
+    with cd('/home/melon'):  # cd用于进入某个目录
+        sudo('tar -xzvf %s'%AR_FILE)
+
+    print ("解压成功")
+    with cd('AssetClient/bin'):  # cd用于进入某个目录
+        sudo('python collect_start.py collect_data')
+
+def all():
+    build()
+    deploy()
 
 
 

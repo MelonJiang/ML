@@ -149,6 +149,16 @@ tbody tr{
 tbody tr td{
     border: 1px;
 }
-/*#asset_list{*/
-    /*width: 100%;*/
-/*}*/
+.asset-info-table{
+    width: 80%;
+    margin-left: 10%;
+}
+.asset-info-table .col-md-2{
+    text-align: right;
+}
+.badge-use{
+    background-color: #0c0c0c;
+}
+.badge-stop{
+    background-color: red;
+}

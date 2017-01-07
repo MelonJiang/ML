@@ -38,11 +38,6 @@ class NicAdmin(admin.ModelAdmin):
     list_display = ('name','macaddress','ipaddress','netmask','bonding')
     search_fields = ('macaddress','ipaddress')
 
-class EventLogAdmin(admin.ModelAdmin):
-    list_display = ('name','colored_event_type','asset','component','detail','date')
-    search_fields = ('asset',)
-    list_filter = ('event_type','component','date')
-
 class NewAssetApprovalZoneAdmin(admin.ModelAdmin):
     list_display = ('sn','asset_type','manufactory','model','cpu_model','cpu_count','cpu_core_count','ram_size','os_distribution','os_release','date','approved','approved_by','approved_date')
     actions = ['approve_selected_objects']
@@ -65,7 +60,7 @@ admin.site.register(models.NIC,NicAdmin)
 admin.site.register(models.RAM)
 admin.site.register(models.Manufactory)
 admin.site.register(models.Software)
-admin.site.register(models.EventLog,EventLogAdmin)
+admin.site.register(models.EventLog)
 admin.site.register(models.NewAssetApprovalZone,NewAssetApprovalZoneAdmin)
 admin.site.register(models.UserProfile)
 admin.site.register(models.Permission)

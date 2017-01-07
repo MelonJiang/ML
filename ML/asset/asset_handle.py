@@ -43,14 +43,14 @@ def fetch_asset_list():
             'asset_type' : obj.get_asset_type_display(),
             'ip' : obj.management_ip,
            # 'hostname' : obj.hostname,
-            'projectname' : obj.projectname.name,
-            'application' : obj.application.name,
+            'projectname' : None if not obj.projectname else obj.projectname.name,
+            'application' : None if not obj.application else obj.application.name,
             'module' : obj.module,
-            'idc_name' : obj.idc.name,
+            'idc_name' : None if not obj.idc else obj.idc.name,
             'idc_jg' : obj.idc_jg,
             'status' : obj.get_status_display(),
-            'linkman' : obj.linkman.name,
-            'admin' : obj.admin.name,
+            'linkman' : None if not obj.linkman else obj.linkman.name,
+            'admin' : None if not obj.admin else obj.admin.name,
             'memo' : obj.memo,
             'details': '详细',
         }
@@ -79,22 +79,26 @@ def fetch_asset_linkman():
 
 
 def fetch_asset_event_logs():
-    log_list = models.EventLog.objects.all()
+    '''获取审计列表'''
+    log_list = models.EventLog.objects.order_by('-id').all()    #倒序
     print ("log_list",log_list)
     data_list = []
+
     for log in log_list:
+        print log.user
         data = {
             'id':log.id,
             'event_type':log.get_event_type_display(),
             'name':log.name,
             'component':log.component,
             'detail':log.detail,
-            'user':log.user.name,
+            'user':log.user.username,
             'date':(log.date).strftime("%Y-%m-%d %H:%M:%S"),
         }
         data_list.append(data)
     print(data_list)
     return {"data":data_list}
+
 
 class LogicalProcess(object):
 
@@ -102,10 +106,9 @@ class LogicalProcess(object):
         self.request = request_obj
 
     # 编辑
-    def modification(self):
+    def modification(self,user_id):
         '''编辑'''
         serial_name = self.request.get('serial_name')
-
         asset_obj = models.Asset.objects.get(name=serial_name)
         data_dic = {
             'asset_type': [asset_obj.asset_type, self.request.get('asset_type')],
@@ -118,26 +121,15 @@ class LogicalProcess(object):
         }
         # log_dic = {}
         for k,v in data_dic.items():
-            if v[0] == v[1]:
-                print v[0], v[1]
-                pass
-            else:   #数据不同,更改
-                print v[0],v[1]
-                # log_dic[getattr(asset_obj, k)] = v[1]
-                li =['idc_id','application_id','projectname_id','linkman_id']
-                if k in li:
-                    pass
-                else:
-                    db_field_obj = asset_obj._meta.get_field(k)  #取出该字段的对象
-                    db_field_obj.save_form_data(asset_obj, v[1])    #把字段内容改为字典传入的内容
-                    asset_obj.save() #保存
-
+            if v[0] != v[1]:
+                db_field_obj = asset_obj._meta.get_field(k)  #取出该字段的对象
+                db_field_obj.save_form_data(asset_obj, v[1])    #把字段内容改为字典传入的内容
+                asset_obj.save() #保存
 
         idc = int(self.request.get('idc_type'))
         linkman = int(self.request.get('linkman_type'))
         projectname  = int(self.request.get('projectname'))
-        application_ = int(self.request.get('application'))
-
+        application = int(self.request.get('application'))
 
         if idc != asset_obj.idc_id:
             asset_obj.idc_id = idc
@@ -148,18 +140,19 @@ class LogicalProcess(object):
         if projectname != asset_obj.application_id:
             asset_obj.projectname_id = projectname
             asset_obj.save()
-        if application_ != asset_obj.application_id:
-            asset_obj.application__id = application_
+        if application != asset_obj.application_id:
+            asset_obj.application_id = application
             asset_obj.save()
 
 
-        # # log_msg = "Asset[%s],component[%s] add [%s]" % (self.asset_obj, model_obj_name, data_set)
-        # # self.log_handler(self.asset_obj, '编辑', self.request.user, log_msg, model_obj_name)
+        log_msg = u"编辑信息成功"
+        self.log_handler(2,user_id,7,log_msg, serial_name)
+
     # 创建
-    def asset_create(self):
+    def asset_create(self,user_id):
         '''新建'''
         print self.request
-
+        serial_name = self.request.get('serial_name')
         data_dic = {
             'asset_type':self.request.get('asset_type'),
             'management_ip': self.request.get('ip'),
@@ -175,8 +168,13 @@ class LogicalProcess(object):
         }
         obj = models.Asset(**data_dic)
         obj.save()
+        log_msg = u'创建IDC信息成功'
+        print log_msg
+        self.log_handler(1,user_id,7,log_msg,serial_name)
+
+
     # 删除
-    def asset_delete(self):
+    def asset_delete(self,user_id):
         '''删除'''
         li_obj = self.request.get('obj')
         li = json.loads(li_obj)
@@ -184,31 +182,26 @@ class LogicalProcess(object):
         for i in li:
             i = int(i)
             hostlist_obj = models.Asset.objects.get(id=i)
+
+            log_msg = u'删除IDC信息成功'
+            self.log_handler(3, user_id, 7, log_msg, hostlist_obj.name)
             hostlist_obj.delete()   #删除
 
 
     # 记录日志
-    def log_handler(self,asset_obj,event_name,user,log_msg,component=None):
+    def log_handler(self,handle_type,user_id,event_type,log_msg,component=None):
         log_event={
-            1 : ['新增'],
-            2 : ['编辑'],
-            3 : ['删除'],
+            1 : u'新增',
+            2 : u'编辑',
+            3 : u'删除',
         }
-        if not user.id:
-            user = models.User.objects.filter(is_admin=True).last()
 
-        event_type= None
-        for k,v in log_event.items():
-            if event_name in v:
-                event_type = k
-                break
         log_obj = models.EventLog(
-            name = event_name,
+            name = log_event[handle_type],
             event_type = event_type,
-            asset_id = asset_obj.id,
             component = component,
             detail = log_msg,
-            user_id = user.id
+            user_id = user_id
         )
         log_obj.save()
 

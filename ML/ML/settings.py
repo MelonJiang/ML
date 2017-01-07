@@ -25,7 +25,7 @@ SECRET_KEY = 'ic@ms5j!)ke-$xa=*0#r&)5j@8%5&=iaqls!=p63t1fdjxn^-r'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['172.16.8.62','192.168.190.1']
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition

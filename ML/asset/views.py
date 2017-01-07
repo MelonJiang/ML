@@ -15,6 +15,7 @@ from asset.permissions import check_permission
 #@token_required
 def asset_report_no_id(request):
     if request.method == 'POST':
+        print "2121"
         ass = core.Asset(request)
         result = ass.get_asset_id_by_sn()
         return HttpResponse(json.dumps(result))
@@ -133,7 +134,7 @@ def asset_compile(request):
         if user_input_obj.is_valid():  # 验证用户输入是否合法
             # data = user_input_obj.clean()  # 合法，获取数据
             obj = asset_handle.LogicalProcess(request_obj)
-            obj.modification()
+            obj.modification(request.user.id)
         else:
             error_msg = user_input_obj.errors.as_json()  # 不合法，返回错误信息
             return HttpResponse(error_msg)
@@ -152,11 +153,12 @@ def asset_create(request):
         if user_input_obj.is_valid():  # 验证用户输入是否合法
             # data = user_input_obj.clean()  # 合法，获取数据
             obj = asset_handle.LogicalProcess(request_obj)
-            obj.asset_create()
+            obj.asset_create(request.user.id)
         else:
             error_msg = user_input_obj.errors.as_json()  # 不合法，返回错误信息
             return HttpResponse(error_msg)
     except Exception as e:
+        print e
         return HttpResponse(e)
     return HttpResponse('seccess')
 
@@ -165,9 +167,12 @@ def asset_create(request):
 def asset_delete(request):
     '''删除'''
     request_obj = request.POST
-    obj = asset_handle.LogicalProcess(request_obj)
-    obj.asset_delete()
-
+    try:
+        obj = asset_handle.LogicalProcess(request_obj)
+        obj.asset_delete(request.user.id)
+    except Exception as e:
+        print e
+        return HttpResponse(e)
     return HttpResponse("list("+json.dumps({"aa":11})+")")
 
 @login_required(login_url="/login/")
