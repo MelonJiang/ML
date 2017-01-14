@@ -32,12 +32,11 @@ class AssetForm(forms.Form):
                                                            "placeholder": "机柜编号"}))
 
     projectname = forms.IntegerField(widget=forms.widgets.Select(
-                attrs={'class': "form-control selectpicker show-tick", 'data-live-search': "true",
+                attrs={'class': "form-control selectpicker show-tick", 'data-live-search': "true",'data-size':'5',
                'id': 'projectname'}))
 
-
     application = forms.IntegerField(widget=forms.widgets.Select(
-        attrs={'class': "form-control selectpicker show-tick", 'data-live-search': "true",
+        attrs={'class': "form-control selectpicker show-tick", 'data-live-search': "true",'data-size':'5',
                'id': 'application'}))
 
     module = forms.CharField(error_messages={"required": "模块"},  # 设置显示的错误信息
@@ -50,7 +49,8 @@ class AssetForm(forms.Form):
     status = forms.IntegerField(widget=forms.widgets.Select(choices=status_type,
                                                                       attrs={'class': "form-control selectpicker",'id':'status'}))
 
-    linkman_type = forms.IntegerField(widget=forms.widgets.Select(attrs={'class': "form-control selectpicker show-tick",'data-live-search':"true",'id':'linkman_type'}))
+    linkman_type = forms.IntegerField(widget=forms.widgets.Select(attrs={'class': "form-control selectpicker show-tick",'data-live-search':"true",'data-size':'5',
+                                                                         'id':'linkman_type'}))
 
     memo = forms.CharField(required=False,  # 可以为空
                            widget=forms.Textarea(attrs={"class": "form-control",'id':'memo',
@@ -99,11 +99,11 @@ class AssetForm_create(forms.Form):
                              widget=forms.TextInput(attrs={"class": "form-control",'id':'idc_jg_create',
                                                            "placeholder": "机柜编号"}))
     projectname = forms.IntegerField(widget=forms.widgets.Select(
-                attrs={'class': "form-control selectpicker show-tick", 'title': 'Nothing selected', 'data-live-search': "true",
+                attrs={'class': "form-control selectpicker show-tick", 'title': 'Nothing selected', 'data-live-search': "true",'data-size':'5',
                'id': 'projectname_create'}))
 
     application = forms.IntegerField(widget=forms.widgets.Select(
-        attrs={'class': "form-control selectpicker show-tick", 'title': 'Nothing selected', 'data-live-search': "true",
+        attrs={'class': "form-control selectpicker show-tick", 'title': 'Nothing selected', 'data-live-search': "true",'data-size':'5',
                'id': 'application_create'}))
 
     module = forms.CharField(error_messages={"required": "模块"},  # 设置显示的错误信息
@@ -116,7 +116,8 @@ class AssetForm_create(forms.Form):
     status = forms.IntegerField(widget=forms.widgets.Select(choices=status_type,
                                                                       attrs={'class': "form-control selectpicker",'id':'status_create'}))
 
-    linkman_type = forms.IntegerField(widget=forms.widgets.Select(attrs={'class': "form-control selectpicker show-tick",'title':'Nothing selected','data-live-search':"true",'id':'linkman_type_create'}))
+    linkman_type = forms.IntegerField(widget=forms.widgets.Select(attrs={'class': "form-control selectpicker show-tick",'title':'Nothing selected','data-size':'5',
+                                                                         'data-live-search':"true",'id':'linkman_type_create'}))
 
     memo = forms.CharField(required=False,  # 可以为空
                            widget=forms.Textarea(attrs={"class": "form-control",'id':'memo_create',
@@ -138,6 +139,37 @@ class AssetForm_create(forms.Form):
         data_tuple1 = models.Application.objects.all().values_list('id', 'name')
         self.fields['application'].widget.choices = data_tuple1
 
+
+class projectForm_create(forms.Form):
+    project_name = forms.CharField(error_messages={"required": "项目名不能为空"},  # 设置显示的错误信息
+                                  widget=forms.TextInput(attrs={"class": "form-control", 'id': 'project_name_create', }))
+
+    memo = forms.CharField(required=False,  # 可以为空
+                           widget=forms.Textarea(attrs={"class": "form-control", 'id': 'memo_create',"placeholder": "备注"}))
+
+class projectForm_update(forms.Form):
+    project_id = forms.IntegerField(widget=forms.TextInput(attrs={"class": "form-control", 'id': 'id_update', 'readonly': 'true',}))
+    project_name = forms.CharField(error_messages={"required": "项目名不能为空"},  # 设置显示的错误信息
+                                  widget=forms.TextInput(attrs={"class": "form-control", 'id': 'project_name_update', }))
+
+    memo = forms.CharField(required=False,  # 可以为空
+                           widget=forms.Textarea(attrs={"class": "form-control", 'id': 'memo_update',"placeholder": "备注"}))
+
+
+class businessForm_create(forms.Form):
+    business_name = forms.CharField(error_messages={"required": "项目名不能为空"},  # 设置显示的错误信息
+                                  widget=forms.TextInput(attrs={"class": "form-control", 'id': 'business_name_create', }))
+
+    memo = forms.CharField(required=False,  # 可以为空
+                           widget=forms.Textarea(attrs={"class": "form-control", 'id': 'memo_create',"placeholder": "备注"}))
+
+class businessForm_update(forms.Form):
+    business_id = forms.IntegerField(widget=forms.TextInput(attrs={"class": "form-control", 'id': 'id_update', 'readonly': 'true',}))
+    business_name = forms.CharField(error_messages={"required": "项目名不能为空"},  # 设置显示的错误信息
+                                  widget=forms.TextInput(attrs={"class": "form-control", 'id': 'business_name_update', }))
+
+    memo = forms.CharField(required=False,  # 可以为空
+                           widget=forms.Textarea(attrs={"class": "form-control", 'id': 'memo_update',"placeholder": "备注"}))
 
 
 

@@ -81,7 +81,7 @@ def fetch_asset_linkman():
 def fetch_asset_event_logs():
     '''获取审计列表'''
     log_list = models.EventLog.objects.order_by('-id').all()    #倒序
-    print ("log_list",log_list)
+    # print ("log_list",log_list)
     data_list = []
 
     for log in log_list:
@@ -99,9 +99,132 @@ def fetch_asset_event_logs():
     print(data_list)
     return {"data":data_list}
 
+def fetch_project_list():
+    '''获取项目列表'''
+    project_list = models.Projectname.objects.all()
+    data_list = []
+
+    for li in project_list:
+        data = {
+            'project_id': li.id,
+            'choice': '',
+            'name': li.name,
+            'memo': li.memo,
+        }
+        data_list.append(data)
+    # print(data_list)
+    return {"data": data_list}
+
+def fetch_business_list():
+    '''获取业务列表'''
+    project_list = models.Application.objects.all()
+    data_list = []
+
+    for li in project_list:
+        data = {
+            'business_id': li.id,
+            'choice': '',
+            'name': li.name,
+            'memo': li.memo,
+        }
+        data_list.append(data)
+    # print(data_list)
+    return {"data": data_list}
+
+
+class ProjectLogical(object):
+    '''项目列表逻辑处理'''
+    def __init__(self,request_obj):
+        self.request = request_obj
+
+    #编辑
+    def modification(self, user_id):
+        project_id = self.request.get('project_id')
+        project_obj = models.Projectname.objects.get(id=project_id)
+        data_dic = {
+            'id': [project_obj.id, self.request.get('project_id')],
+            'name': [project_obj.name, self.request.get('project_name')],
+            'memo': [project_obj.memo, self.request.get('memo')],
+        }
+        for k,v in data_dic.items():
+            if v[0] != v[1]:
+                print k,v
+                db_field_obj = project_obj._meta.get_field(k)  #取出该字段的对象
+                db_field_obj.save_form_data(project_obj, v[1])    #把字段内容改为字典传入的内容
+                project_obj.save() #保存
+
+
+    #新建
+    def Project_create(self, user_id):
+        dic = {
+            'name':self.request.get('project_name'),
+            'memo':  self.request.get('memo')
+        }
+        obj = models.Projectname(**dic)
+        obj.save()
+
+    #删除
+    def Project_delete(self, user_id):
+        li_obj = self.request.get('obj')
+        li = json.loads(li_obj)
+        print li
+        for i in li:
+            i = int(i)
+            project_obj = models.Projectname.objects.get(id=i)
+
+            # log_msg = u'删除IDC信息成功'
+            # self.log_handler(3, user_id, 7, log_msg, project_obj.name)
+            project_obj.delete()  # 删除
+
+
+class BusinessLogical(object):
+    '''业务列表逻辑处理'''
+
+    def __init__(self, request_obj):
+        self.request = request_obj
+
+    # 业务编辑
+    def modification(self, user_id):
+        business_id = self.request.get('business_id')
+        business_obj = models.Application.objects.get(id=business_id)
+        data_dic = {
+            'id': [business_obj.id, self.request.get('business_id')],
+            'name': [business_obj.name, self.request.get('business_name')],
+            'memo': [business_obj.memo, self.request.get('memo')],
+        }
+        for k, v in data_dic.items():
+            if v[0] != v[1]:
+                print k, v
+                db_field_obj = business_obj._meta.get_field(k)  # 取出该字段的对象
+                db_field_obj.save_form_data(business_obj, v[1])  # 把字段内容改为字典传入的内容
+                business_obj.save()  # 保存
+
+    # 业务新建
+    def business_create(self, user_id):
+        pass
+        dic = {
+            'name': self.request.get('business_name'),
+            'memo': self.request.get('memo')
+        }
+        obj = models.Application(**dic)
+        obj.save()
+
+    # 业务删除
+    def business_delete(self, user_id):
+        li_obj = self.request.get('obj')
+        li = json.loads(li_obj)
+        print li
+        for i in li:
+            i = int(i)
+            business_obj = models.Application.objects.get(id=i)
+
+            # log_msg = u'删除IDC信息成功'
+            # self.log_handler(3, user_id, 7, log_msg, project_obj.name)
+            business_obj.delete()  # 删除
+
 
 class LogicalProcess(object):
-
+    '''资产列表逻辑处理'''
     def __init__(self,request_obj):
         self.request = request_obj
 
@@ -125,6 +248,8 @@ class LogicalProcess(object):
                 db_field_obj = asset_obj._meta.get_field(k)  #取出该字段的对象
                 db_field_obj.save_form_data(asset_obj, v[1])    #把字段内容改为字典传入的内容
                 asset_obj.save() #保存
+
+
 
         idc = int(self.request.get('idc_type'))
         linkman = int(self.request.get('linkman_type'))

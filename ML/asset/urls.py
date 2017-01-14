@@ -25,4 +25,13 @@ urlpatterns =[
     url(r'^error2/$', views.error_404, name="error_404"),
     url(r'^btn_create/$', views.btn_create, name="btn_create"),
     url(r'^btn_update/$', views.btn_update, name="btn_update"),
+    url(r'^project_list/$', views.project_list, name="project_list"),
+    url(r'^business_list/$', views.business_list, name="business_list"),
+    url(r'^project_create/$', views.project_create, name="project_create"),
+    url(r'^project_compile/$', views.project_compile, name="project_compile"),
+    url(r'^project_delete/$', views.project_delete, name="project_delete"),
+    url(r'^business_create/$', views.business_create, name="business_create"),
+    url(r'^business_compile/$', views.business_compile, name="business_compile"),
+    url(r'^business_delete/$', views.business_delete, name="business_delete"),
+
 ]

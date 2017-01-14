@@ -15,7 +15,6 @@ from asset.permissions import check_permission
 #@token_required
 def asset_report_no_id(request):
     if request.method == 'POST':
-        print "2121"
         ass = core.Asset(request)
         result = ass.get_asset_id_by_sn()
         return HttpResponse(json.dumps(result))
@@ -75,7 +74,6 @@ def event_log_list(request):
 @login_required(login_url="/login/")
 def asset_event_logs(request):
     '''变更记录'''
-    print ('12313232')
     if request.method == "GET":
         log_list = asset_handle.fetch_asset_event_logs()
         return HttpResponse(json.dumps(log_list))
@@ -173,7 +171,7 @@ def asset_delete(request):
     except Exception as e:
         print e
         return HttpResponse(e)
-    return HttpResponse("list("+json.dumps({"aa":11})+")")
+    return HttpResponse("list("+json.dumps({"seccess":"seccess"})+")")
 
 @login_required(login_url="/login/")
 def asset_linkman(request):
@@ -204,5 +202,99 @@ def btn_create(request):
 def btn_update(request):
     '''编辑按钮权限判断'''
     return HttpResponse("list("+json.dumps({"aa":"seccess"})+")")
+
+def project_list(request):
+    if request.method == 'POST':
+        project_list = asset_handle.fetch_project_list()
+        print(project_list)
+        return HttpResponse(json.dumps(project_list))
+    else:
+
+        obj_create = asset_form.projectForm_create()
+        obj_update = asset_form.projectForm_update()
+        return render(request,'assets/project_list.html',{"obj_create":obj_create,"obj_update":obj_update})
+
+def project_create(request):
+    '''项目创建'''
+    request_obj = request.POST
+    try:
+        obj = asset_handle.ProjectLogical(request_obj)
+        obj.Project_create(request.user.id)
+    except Exception as e:
+        print e
+        return HttpResponse(e)
+    return HttpResponse('seccess')
+
+
+def project_compile(request):
+    '''项目编辑'''
+    request_obj = request.POST
+    print "asa",request_obj
+    try:
+        obj = asset_handle.ProjectLogical(request_obj)
+        obj.modification(request.user.id)
+    except Exception as e:
+        print e
+        return HttpResponse(e)
+    return HttpResponse('seccess')
+
+def project_delete(request):
+    '''项目删除'''
+    request_obj = request.POST
+    try:
+        obj = asset_handle.ProjectLogical(request_obj)
+        obj.Project_delete(request.user.id)
+    except Exception as e:
+        print e
+        return HttpResponse(e)
+    return HttpResponse("list(" + json.dumps({"seccess": "seccess"}) + ")")
+
+
+def business_list(request):
+    if request.method == 'POST':
+        business_list = asset_handle.fetch_business_list()
+        print(business_list)
+        return HttpResponse(json.dumps(business_list))
+    else:
+        obj_create = asset_form.businessForm_create()
+        obj_update = asset_form.businessForm_update()
+        return render(request,'assets/business_list.html',{"obj_create":obj_create,"obj_update":obj_update})
+
+
+def business_create(request):
+    '''业务创建'''
+    request_obj = request.POST
+    print request_obj
+    try:
+        obj = asset_handle.BusinessLogical(request_obj)
+        obj.business_create(request.user.id)
+    except Exception as e:
+        print e
+        return HttpResponse(e)
+    return HttpResponse('seccess')
+
+def business_compile(request):
+    '''业务编辑'''
+    request_obj = request.POST
+    try:
+        obj = asset_handle.BusinessLogical(request_obj)
+        obj.modification(request.user.id)
+    except Exception as e:
+        print e
+        return HttpResponse(e)
+    return HttpResponse('seccess')
+
+def business_delete(request):
+    '''业务删除'''
+    request_obj = request.POST
+    try:
+        obj = asset_handle.BusinessLogical(request_obj)
+        obj.business_delete(request.user.id)
+    except Exception as e:
+        print e
+        return HttpResponse(e)
+    return HttpResponse("list(" + json.dumps({"seccess": "seccess"}) + ")")
+
+
 
 

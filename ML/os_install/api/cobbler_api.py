@@ -42,9 +42,10 @@ class CobblerAPI(object):
         return ret
 
 def main():
-    cobbler = CobblerAPI(url=,user,password,)
-    ret = cobbler.add_system(hostname='test',ip_add='#',mac_add='#',profile='CentOS6.3-x86_64')
-    print ret
+    # cobbler = CobblerAPI(url=,user,password,)
+    # ret = cobbler.add_system(hostname='test',ip_add='#',mac_add='#',profile='CentOS6.3-x86_64')
+    # print ret
+    pass
 
 if __name__ == '__main__':
     main()
