@@ -88,7 +88,6 @@ def code_distribution(request):
     host = {'ga': 'test-01', 'beta': 'localhost.localdomain'}
     user = request.user
     if request.method == 'POST':
-        #print(request.get_full_path())
         action = request.GET.get('action')
 
         if action == 'push':
