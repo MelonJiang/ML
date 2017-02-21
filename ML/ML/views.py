@@ -23,6 +23,9 @@ def log_out(request):
     return HttpResponseRedirect("/login/")
 
 
+def home_page(request):
+    return HttpResponseRedirect("/login/")
+
 #饼图
 def test(request):
     data = [['已用:90%', 90.0],['可用:10%',   10.0]]

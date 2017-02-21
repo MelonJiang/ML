@@ -203,6 +203,7 @@ def btn_update(request):
     '''编辑按钮权限判断'''
     return HttpResponse("list("+json.dumps({"aa":"seccess"})+")")
 
+@login_required(login_url="/login/")
 def project_list(request):
     if request.method == 'POST':
         project_list = asset_handle.fetch_project_list()
@@ -214,6 +215,7 @@ def project_list(request):
         obj_update = asset_form.projectForm_update()
         return render(request,'assets/project_list.html',{"obj_create":obj_create,"obj_update":obj_update})
 
+@login_required(login_url="/login/")
 def project_create(request):
     '''项目创建'''
     request_obj = request.POST
@@ -225,7 +227,7 @@ def project_create(request):
         return HttpResponse(e)
     return HttpResponse('seccess')
 
-
+@login_required(login_url="/login/")
 def project_compile(request):
     '''项目编辑'''
     request_obj = request.POST
@@ -238,6 +240,7 @@ def project_compile(request):
         return HttpResponse(e)
     return HttpResponse('seccess')
 
+@login_required(login_url="/login/")
 def project_delete(request):
     '''项目删除'''
     request_obj = request.POST
@@ -249,7 +252,7 @@ def project_delete(request):
         return HttpResponse(e)
     return HttpResponse("list(" + json.dumps({"seccess": "seccess"}) + ")")
 
-
+@login_required(login_url="/login/")
 def business_list(request):
     if request.method == 'POST':
         business_list = asset_handle.fetch_business_list()
@@ -260,7 +263,7 @@ def business_list(request):
         obj_update = asset_form.businessForm_update()
         return render(request,'assets/business_list.html',{"obj_create":obj_create,"obj_update":obj_update})
 
-
+@login_required(login_url="/login/")
 def business_create(request):
     '''业务创建'''
     request_obj = request.POST
@@ -273,6 +276,7 @@ def business_create(request):
         return HttpResponse(e)
     return HttpResponse('seccess')
 
+@login_required(login_url="/login/")
 def business_compile(request):
     '''业务编辑'''
     request_obj = request.POST
@@ -284,6 +288,7 @@ def business_compile(request):
         return HttpResponse(e)
     return HttpResponse('seccess')
 
+@login_required(login_url="/login/")
 def business_delete(request):
     '''业务删除'''
     request_obj = request.POST

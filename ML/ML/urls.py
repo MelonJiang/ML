@@ -19,6 +19,7 @@ from ML import views
 admin.autodiscover()
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
+    url(r'^$', views.home_page,name="home_page"),
     url(r'^asset/', include("asset.urls")),
     url(r'^deploy/', include("deploy.urls")),
     url(r'^os_install/', include("os_install.urls")),
