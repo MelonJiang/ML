@@ -142,47 +142,55 @@
 
         </div>
         <div id="tab-hardware-info" class="tab-pane fade">
+            <div>
+                <div class="col-md-6">
+                   <table class="">
+                       <h4 class="tab_h3">服务器</h4>
+                       <tr>
+                           <td class="col-md-2 bold">Name</td>
+                           <td class="col-md-4">: {{ asset_obj.name }}</td>
+                           <td class="col-md-2 bold">OS</td>
+                           <td class="col-md-4">: {{ asset_obj.server.os_distribution }}</td>
+                       </tr>
+                       <tr>
+                           <td class="col-md-2 bold">SN</td>
+                           <td class="col-md-4">: {{ asset_obj.sn }}</td>
+                           <td class="col-md-2 bold">OS Version</td>
+                           <td class="col-md-4">: {{ asset_obj.server.os_release }}</td>
+                       </tr>
+                       <tr>
+                           <td class="col-md-2 bold">Model</td>
+                           <td class="col-md-4">: {{ asset_obj.server.model }}</td>
+                           <td class="col-md-2 bold">信息来源</td>
+                           <td class="col-md-4">: {{ asset_obj.server.created_by }}</td>
+                       </tr>
+                   </table>
+                   <hr/>
+                    </div>
+                <div class="col-md-6">
+                   <table class="">
+                       <h4 class="tab_h3">CPU 信息</h4>
+                       <tr>
+                           <td class="col-md-2 bold">CPU型号</td>
+                           <td class="col-md-4">: {{ asset_obj.cpu.cpu_model }}</td>
+                           <td class="col-md-2 bold">物理CPU个数</td>
+                           <td class="col-md-4">: {{ asset_obj.cpu.cpu_count }}</td>
+                       </tr>
+                       <tr>
+                           <td class="col-md-2 bold">CPU核数</td>
+                           <td class="col-md-4">: {{ asset_obj.cpu.cpu_core_count }}</td>
+                           <td class="col-md-2 bold">最近更新日期</td>
+                           <td class="col-md-4">: {{ asset_obj.cpu.update_date }}</td>
+                       </tr>
+                   </table>
+                   <hr/>
+                </div>
+            </div>
 
-           <table class="">
-               <h4 class="tab_h3">服务器</h4>
-               <tr>
-                   <td class="col-md-2 bold">Name</td>
-                   <td class="col-md-4">: {{ asset_obj.name }}</td>
-                   <td class="col-md-2 bold">OS</td>
-                   <td class="col-md-4">: {{ asset_obj.server.os_distribution }}</td>
-               </tr>
-               <tr>
-                   <td class="col-md-2 bold">SN</td>
-                   <td class="col-md-4">: {{ asset_obj.sn }}</td>
-                   <td class="col-md-2 bold">OS Version</td>
-                   <td class="col-md-4">: {{ asset_obj.server.os_release }}</td>
-               </tr>
-               <tr>
-                   <td class="col-md-2 bold">Model</td>
-                   <td class="col-md-4">: {{ asset_obj.server.model }}</td>
-                   <td class="col-md-2 bold">信息来源</td>
-                   <td class="col-md-4">: {{ asset_obj.server.created_by }}</td>
-               </tr>
-           </table>
-           <hr/>
-           <table class="">
-               <h4 class="tab_h3">CPU 信息</h4>
-               <tr>
-                   <td class="col-md-2 bold">CPU型号</td>
-                   <td class="col-md-4">: {{ asset_obj.cpu.cpu_model }}</td>
-                   <td class="col-md-2 bold">物理CPU个数</td>
-                   <td class="col-md-4">: {{ asset_obj.cpu.cpu_count }}</td>
-               </tr>
-               <tr>
-                   <td class="col-md-2 bold">CPU核数</td>
-                   <td class="col-md-4">: {{ asset_obj.cpu.cpu_core_count }}</td>
-                   <td class="col-md-2 bold">最近更新日期</td>
-                   <td class="col-md-4">: {{ asset_obj.cpu.update_date }}</td>
-               </tr>
-           </table>
-           <hr/>
-           <table class="">
-               <h4 class="tab_h3">RAM 信息</h4>
+           <table class="table">
+               <div class="col-md-12">
+                    <h4 class="tab_h3">RAM 信息</h4>
+               </div>
                <tr>
                    <td class="col-md-2 bold">总内存大小(MB)</td>
                    <td class="col-md-4">: {{ asset_obj.ram_set.select_related | sum_size }}</td>

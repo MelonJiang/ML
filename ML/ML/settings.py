@@ -134,7 +134,7 @@ STATICFILES_DIRS=(os.path.join(BASE_DIR, 'static'),)
 TOKEN_TIMEOUT = 120
 
 SALT_API={
-    'url':'https://192.168.190.132:8888',
+    'url':'https://192.168.0.103:8888',
     'user':'saltapi',
     'password':'123456'
 }
