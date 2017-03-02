@@ -14,5 +14,4 @@ ML管理平台界面部分截图
 ![主页](https://github.com/MelonJiang/ML/raw/master/ML/demo_image/salt1.png)
 ![主页](https://github.com/MelonJiang/ML/raw/master/ML/demo_image/salt2.png)
 ![主页](https://github.com/MelonJiang/ML/raw/master/ML/demo_image/salt3.png)
-![主页](https://github.com/MelonJiang/ML/raw/master/ML/demo_image/log1.png)
 。。。。待续
